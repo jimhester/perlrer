@@ -6,11 +6,7 @@ Author: Jim Hester
 Title: perlrer - perl regular expression syntax and results in R
 Description: Input perl regular expression, output perl results
 Depends:
-    R (>= 3.0.0),
-Imports:
-    
-Suggests:
-    
+    R (>= 3.0.0)
 License: MIT
 URL: http://github.com/jimhester/perlrer
 BugReports: https://github.com/jimhester/perlrer/issues

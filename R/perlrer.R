@@ -1,3 +1,4 @@
+#' @export m
 m = function(data, pattern, options=""){
   #add any options to the pattern
   pattern = paste0("(?", paste0(options, collapse=""), ")", pattern)
