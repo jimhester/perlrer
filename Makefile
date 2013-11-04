@@ -1,4 +1,4 @@
-BASE=$(filter-out .R_package, $(wildcard R/*.R)
+BASE=$(wildcard R/*.R inst/tests/*.R)
 
 all: install
 
@@ -20,13 +20,16 @@ PKGSRC  := $(shell basename `pwd`)
 news: NEWS.md
 	sed -e 's/^-/  -/' -e 's/^## *//' -e 's/^#/\t\t/' < NEWS.md | fmt -80 -s > NEWS
 
-docs:
+docs: $(BASE)
 	Rscript -e 'library(devtools);library(methods);library(utils);document()'
 
-build:
+build: $(BASE)
 	cd ..;\
 	R CMD build $(PKGSRC)
 
 check: build
 	cd ..;\
 	R CMD check $(PKGNAME)_$(PKGVERS).tar.gz --as-cran
+
+tests: $(BASE)
+	Rscript -e 'library(devtools);library(methods);library(utils);test()'
