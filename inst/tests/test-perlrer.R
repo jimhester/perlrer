@@ -1,8 +1,6 @@
 #TODO non ascii tests
 string = c('this is Text', 'chr-12', '12343 66544456')
 multiline_string = 'This\nis\na\nstring'
-capture = function(x) paste0('(', x, ')')
-named_capture = function(x, name) paste0('(?<', name, '>', x, ')')
 
 alpha = '[A-Za-z]'
 alphas = paste0(alpha, '+')
@@ -34,7 +32,7 @@ test_that('m with no capture returns a logical', {
 
 test_that('m works with perl style capture variables', {
 
-  expect_that(m(string, paste0(capture(4), '[^4]+', capture('$1+'))), equals(list(`1`=c('', '',4), `2`=c('', '', 444))))
+  expect_that(m(string, paste0(capture(4), any1(not(4)), capture('$1+'))), equals(list(`1`=c('', '',4), `2`=c('', '', 444))))
   # named backreferences not supported in r expect_that(m(string, paste0(named_capture(4, 'four'), '[^4]+', capture('$four+'))), equals(list(four=c('', '',4), `2`=c('', '', 444))))
 
 })
@@ -81,4 +79,24 @@ test_that('s substitutes properly, with and without options', {
           expect_that(s(string, 'text', 'test', options='i'), equals(c('this is test', 'chr-12', '12343 66544456')))
           expect_that(s(string, 'is [ ] text', 'is test', options='ix'), equals(c('this is test', 'chr-12', '12343 66544456')))
           expect_that(s(string, 'i', 'x', options='g'), equals(c('thxs xs Text', 'chr-12', '12343 66544456')))
+})
+
+test_that("split_regex splits various regex\'s properly", {
+  expect_that(split_regex('/test/i'), c(pattern='test', options='i'))
+  expect_that(split_regex('{test}i'), c(pattern='test', options='i'))
+  expect_that(split_regex('[test]i'), c(pattern='test', options='i'))
+  expect_that(split_regex('<test>i'), c(pattern='test', options='i'))
+  expect_that(split_regex('!test!i'), c(pattern='test', options='i'))
+  expect_that(split_regex('_test_i'), c(pattern='test', options='i'))
+  expect_that(split_regex(' test i'), c(pattern='test', options='i'))
+  expect_that(split_regex('/test/i'), c(pattern='test', options='i'))
+  expect_that(split_regex('{test}i'), c(pattern='test', options='i'))
+  expect_that(split_regex('/test/replace/i'), c(pattern='test', replacement='replace', options='i'))
+  expect_that(split_regex('{test}{replace}i'), c(pattern='test', replacement='replace', options='i'))
+})
+
+test_that("infix functions work properly", {
+  expect_that(string %m% '/this/', equals(m(string, 'this')))
+  expect_that(string %m% '/this//', throws_error())
+  expect_that(string %s% '/this/that/', equals(s(string, 'this', 'that')))
 })

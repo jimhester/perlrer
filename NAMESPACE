@@ -1,2 +1,7 @@
+export("%m%")
+export("%s%")
 export(m)
+export(pjoin)
+export(psplit)
+export(s)
 import(assertthat)
