@@ -20,3 +20,21 @@ library(perlrer)
 string = 'This is a test'
 string %s% '/this/that/i'
 ```
+```{r engine='perl'}
+@alist = ('one', 'two', 'three');
+$astring = 'four';
+$joined_str = join(':', @alist, $astring);
+print $joined_str, "\n";
+@split_str = split(/:/, $joined_str);
+print "@split_str\n";
+```
+```{r, results='hold'}
+library(perlrer)
+alist = c('one', 'two', 'three')
+astring = 'four'
+joined_str = pjoin(':', alist, astring)
+joined_str
+split_str = psplit(':', joined_str)
+split_str
+```
+

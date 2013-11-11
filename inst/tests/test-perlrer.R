@@ -32,23 +32,23 @@ test_that('m with no capture returns a logical', {
 
 test_that('m works with perl style capture variables', {
 
-  expect_that(m(string, paste0(capture(4), any1(not(4)), capture('$1+'))), equals(list(`1`=c('', '',4), `2`=c('', '', 444))))
+  expect_that(m(string, paste0(capture(4), any1(not(4)), capture('$1+'))), equals(list(`1`=c('FALSE', 'FALSE',4), `2`=c('FALSE', 'FALSE', 444))))
   # named backreferences not supported in r expect_that(m(string, paste0(named_capture(4, 'four'), '[^4]+', capture('$four+'))), equals(list(four=c('', '',4), `2`=c('', '', 444))))
 
 })
 
 test_that('m with capture returns numbered list', {
 
-          expect_that(m(string, capture(digets)), equals(list(`1`=c('', '12', '12343'))))
-          expect_that(m(string, capture(alphas)), equals(list(`1`=c('this', 'chr', ''))))
-          expect_that(m(string, paste0(capture(alphas), space, capture(alphas))), equals(list(`1`=c('this', '', ''), `2`=c('is', '', ''))))
+          expect_equal(m(string, capture(digets)), list(`1`=c('FALSE', '12', '12343')))
+          expect_that(m(string, capture(alphas)), equals(list(`1`=c('this', 'chr', 'FALSE'))))
+          expect_that(m(string, paste0(capture(alphas), space, capture(alphas))), equals(list(`1`=c('this', 'FALSE', 'FALSE'), `2`=c('is', 'FALSE', 'FALSE'))))
 
 })
 
 test_that('m with named capture returns named list', {
 
-          expect_that(m(string, named_capture(digets, 'digets')), equals(list(digets=c('', '12', '12343'))))
-          expect_that(m(string, named_capture(alphas, 'alphas')), equals(list(alphas=c('this', 'chr', ''))))
+          expect_that(m(string, named_capture('digets', digets)), equals(list(digets=c('FALSE', '12', '12343'))))
+          expect_that(m(string, named_capture('alphas', alphas)), equals(list(alphas=c('this', 'chr', 'FALSE'))))
 
 })
 
@@ -64,7 +64,10 @@ test_that('m options other than g', {
 })
 
 test_that('m with g', {
-          expect_that(m(string, capture(alpha), options='g'), equals(list(list(`1`=c('t', 'h', 'i', 's', 'i', 's', 'T', 'e', 'x', 't')), list(`1`=c('c', 'h', 'r')), list(`1`=''))))
+          expect_that(m(string, capture(alpha), options='g'),
+                      equals(list(list(`1`=c('t', 'h', 'i', 's', 'i', 's', 'T', 'e', 'x', 't')), 
+                                  list(`1`=c('c', 'h', 'r')), list(`1`='FALSE'))))
+          
 })
 
 test_that('s fails if given other than character vector', {
@@ -81,18 +84,43 @@ test_that('s substitutes properly, with and without options', {
           expect_that(s(string, 'i', 'x', options='g'), equals(c('thxs xs Text', 'chr-12', '12343 66544456')))
 })
 
-test_that("split_regex splits various regex\'s properly", {
-  expect_that(split_regex('/test/i'), c(pattern='test', options='i'))
-  expect_that(split_regex('{test}i'), c(pattern='test', options='i'))
-  expect_that(split_regex('[test]i'), c(pattern='test', options='i'))
-  expect_that(split_regex('<test>i'), c(pattern='test', options='i'))
-  expect_that(split_regex('!test!i'), c(pattern='test', options='i'))
-  expect_that(split_regex('_test_i'), c(pattern='test', options='i'))
-  expect_that(split_regex(' test i'), c(pattern='test', options='i'))
-  expect_that(split_regex('/test/i'), c(pattern='test', options='i'))
-  expect_that(split_regex('{test}i'), c(pattern='test', options='i'))
-  expect_that(split_regex('/test/replace/i'), c(pattern='test', replacement='replace', options='i'))
-  expect_that(split_regex('{test}{replace}i'), c(pattern='test', replacement='replace', options='i'))
+test_that("split_regex_m splits various regex\'s properly", {
+  expect_equal(split_regex_m('/test/i'), list(pattern='test', options='i'))
+  expect_equal(split_regex_m('{test}i'), list(pattern='test', options='i'))
+  expect_equal(split_regex_m('[test]i'), list(pattern='test', options='i'))
+  expect_equal(split_regex_m('<test>i'), list(pattern='test', options='i'))
+  expect_equal(split_regex_m('!test!i'), list(pattern='test', options='i'))
+  expect_equal(split_regex_m('_test_i'), list(pattern='test', options='i'))
+  expect_equal(split_regex_m(' test i'), list(pattern='test', options='i'))
+  expect_equal(split_regex_m('/test/i'), list(pattern='test', options='i'))
+  expect_equal(split_regex_m('{test}i'), list(pattern='test', options='i'))
+  expect_equal(split_regex_m('{test}i'), list(pattern='test', options='i'))
+  expect_error(split_regex_m('{test}I'))
+  expect_error(split_regex_m('/test/blah/'))
+  expect_error(split_regex_m('test/blah/'))
+  expect_error(split_regex_m('/test//'))
+  expect_error(split_regex_m(''))
+  expect_error(split_regex_m('/'))
+  expect_error(split_regex_m('//'))
+  expect_error(split_regex_m('///'))
+})
+
+test_that("split_regex_s splits various regex\'s properly", {
+  expect_equal(split_regex_s('/test/replace/i'), list(pattern='test', replacement='replace', options='i'))
+  expect_equal(split_regex_s('{test}{replace}i'), list(pattern='test', replacement='replace', options='i'))
+  expect_equal(split_regex_s('[test][replace]i'), list(pattern='test', replacement='replace', options='i'))
+  expect_equal(split_regex_s('<test><replace>i'), list(pattern='test', replacement='replace', options='i'))
+  expect_equal(split_regex_s('!test!replace!i'), list(pattern='test', replacement='replace', options='i'))
+  expect_equal(split_regex_s('_test_replace_i'), list(pattern='test', replacement='replace', options='i'))
+  expect_equal(split_regex_s(' test replace i'), list(pattern='test', replacement='replace', options='i'))
+  expect_equal(split_regex_s('/test/replace/i'), list(pattern='test', replacement='replace', options='i'))
+  expect_equal(split_regex_s('{test}{replace}i'), list(pattern='test', replacement='replace', options='i'))
+  expect_error(split_regex_s('/test/blah/aoirestn/'))
+  expect_error(split_regex_s('test/blah/ar/'))
+  expect_error(split_regex_s(''))
+  expect_error(split_regex_s('/'))
+  expect_error(split_regex_s('//'))
+  expect_error(split_regex_s('///'))
 })
 
 test_that("infix functions work properly", {

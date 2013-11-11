@@ -1,8 +1,11 @@
 #' \pkg{perlrer} Use perl regular expressions in R!
+#'
 #' @import assertthat
 #' @name perlrer
 #' @docType package
 NULL
+
+pairs = c('<' = '>', '\\{' = '\\}', '\\[' = '\\]', '\\(' = '\\)')
 
 #' @export m
 m = function(data, pattern, options=""){
@@ -20,7 +23,8 @@ m = function(data, pattern, options=""){
     names = attr(res, 'capture.names')
     ret = list()
     for(itr in seq_len(ncol(starts))){
-      ret[[itr]] = ifelse(starts[,itr] == -1, FALSE, substring(data, starts[,itr], starts[,itr] + lengths[,itr] - 1))
+      ret[[itr]] = unname(ifelse(starts[,itr] == -1, "FALSE",
+                          substring(data, starts[,itr], starts[,itr] + lengths[,itr] - 1)))
     }
     names(ret) = ifelse(names == "", 1:nrow(starts), names)
     ret
@@ -79,7 +83,7 @@ s = function(data, pattern, replacement, options='') {
 }
 
 #' @export
-psplit = function(data, pattern, options, names=NULL){
+psplit = function(pattern, data, options, names=NULL){
   res = gregexpr(pattern=pattern, data, perl=T)[[1]]
   lengths = attr(res, 'match.length')
   prev = c(1, res)
@@ -95,45 +99,51 @@ pjoin = function(delim = '', ...) paste(unlist(list(...)), collapse=delim)
 escape_special = function(x){
   s(x, '([\\[\\](){}])', '\\\\$1', 'g')
 }
-split_regex_s = function(regex){
-  pairs = c('<' = '>', '{' = '}', '\\[' = '\\]', '\\(' = '\\)')
-  first = escape_special(substring(regex, 1, 1))
-  res = if(!first %in% names(pairs))
-    m(regex, paste0(first, named_capture('.+?', 'pattern'),
-      not_escaped(first), named_capture('.*?', 'replacement'),
-      not_escaped(first), named_capture('[a-z]*', 'options')))
-  else
-    m(regex, paste0(first, named_capture('.+?', 'pattern'),
-      not_escaped(pairs[first]), first, named_capture('.*?', 'replacement'),
-      not_escaped(pairs[first]), named_capture('[a-z]*', 'options')))
-  if(res$pattern == FALSE)
-    stop('regex: ', regex, ' is not a valid regular expression')
-  res
-}
+
 split_regex_m = function(regex){
-  pairs = c('<' = '>', '{' = '}', '\\[' = '\\]', '\\(' = '\\)')
   first = escape_special(substring(regex, 1, 1))
-  res = if(!first %in% names(pairs))
-    m(regex, paste0(first, named_capture('.+?', 'pattern'),
-      not_escaped(first), named_capture('[a-z]*', 'options')))
-  else
-    m(regex, paste0(first, named_capture('.+?', 'pattern'),
-      not_escaped(pairs[first]), named_capture('[a-z]*', 'options')))
+  #from http://stackoverflow.com/questions/7901978/regex-and-escaped-and-unescaped-delimiter
+  pattern = if(first %in% names(pairs)){
+    escaped_text = paste0('(?:\\\\.|[^\\\\', pairs[first], ']++)')
+    paste0('^', first, named_capture('pattern', any1(escaped_text)),
+      pairs[first], named_capture('options', '[a-z]*'), '$')
+  }
+  else {
+    escaped_text = paste0('(?:\\\\.|[^\\\\', first, ']++)')
+    paste0('^', first, named_capture('pattern', any1(escaped_text)),
+      first, named_capture('options', '[a-z]*'), '$')
+  }
+  res = m(regex, pattern)
   if(res$pattern == FALSE)
     stop('regex: ', regex, ' is not a valid regular expression')
   res
 }
 
-expand_paired = function(x){
-  pairs = c('<' = '>', '{' = '}', '[' = '\\]', '(' = ')')
-  if(x %in% names(pairs))
-    pairs[x]
-  else
-    x
+split_regex_s = function(regex){
+  first = escape_special(substring(regex, 1, 1))
+  #from http://stackoverflow.com/questions/7901978/regex-and-escaped-and-unescaped-delimiter
+  escaped_text = paste0('(?:\\\\.|[^\\\\', first, ']++)')
+  pattern = if(first %in% names(pairs)){
+    escaped_text = paste0('(?:\\\\.|[^\\\\', pairs[first], ']++)')
+    paste0('^', first, named_capture('pattern', any1(escaped_text)),
+      pairs[first], first, named_capture('replacement', any(escaped_text)),
+      pairs[first], named_capture('options', '[a-z]*'), '$')
+  }
+  else {
+    escaped_text = paste0('(?:\\\\.|[^\\\\', first, ']++)')
+    paste0('^', first, named_capture('pattern', any1(escaped_text)),
+      first, named_capture('replacement', any(escaped_text)),
+      first, named_capture('options', '[a-z]*'), '$')
+  }
+  res = m(regex, pattern)
+  if(res$pattern == FALSE)
+    stop('regex: ', regex, ' is not a valid regular expression')
+  res
 }
 perl_capture = function(x){
   gsub('\\$([0-9]+)', '\\\\1', x)
 }
+
 reformat_pattern = function(pattern, options){
   #replace any perl style captures ($1) with \\1
   pattern = perl_capture(pattern)
@@ -144,9 +154,10 @@ reformat_pattern = function(pattern, options){
   pattern
 }
 
-capture = function(x) paste0('(', x, ')')
-named_capture = function(x, name) paste0('(?<', name, '>', x, ')')
-not = function(x) paste0('[^', x, ']')
+capture = function(...) paste0('(', ..., ')', collapse='')
+named_capture = function(name, ...) paste0('(?<', name, '>', ..., ')', collapse='')
+group = function(...) paste0('(?:', ..., ')', collpase='')
+not = function(...) paste0('[^', ..., ']', collape='')
 any1 = function(x) paste0(x, '+')
 any = function(x) paste0(x, '*')
 not_escaped = function(x) paste0('(?<!\\\\)', x)

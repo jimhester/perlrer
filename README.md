@@ -44,3 +44,38 @@ string %s% "/this/that/i"
 ## [1] "that is a test"
 ```
 
+
+```perl
+@alist = ('one', 'two', 'three');
+$astring = 'four';
+$joined_str = join(':', @alist, $astring);
+print $joined_str, "\n";
+@split_str = split(/:/, $joined_str);
+print "@split_str\n";
+```
+
+```
+## one:two:three:four
+## one two three four
+```
+
+
+```r
+library(perlrer)
+alist = c("one", "two", "three")
+astring = "four"
+joined_str = pjoin(":", alist, astring)
+joined_str
+split_str = psplit(":", joined_str)
+split_str
+```
+
+```
+## [1] "one:two:three:four"
+```
+
+```
+## [1] "one"   "two"   "three" "four"
+```
+
+
