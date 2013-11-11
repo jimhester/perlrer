@@ -12,7 +12,7 @@ print scalar $string =~ m/this/i;
 ```
 
 
-```r
+```s
 library(perlrer)
 string = "This is a test"
 string %m% "/this/i"
@@ -34,7 +34,7 @@ print $string;
 ```
 
 
-```r
+```s
 library(perlrer)
 string = "This is a test"
 string %s% "/this/that/i"
@@ -60,7 +60,7 @@ print "@split_str\n";
 ```
 
 
-```r
+```s
 library(perlrer)
 alist = c("one", "two", "three")
 astring = "four"

@@ -22,6 +22,8 @@ news: NEWS.md
 
 docs: $(BASE)
 	Rscript -e 'library(devtools);library(methods);library(utils);document()'
+	Rscript -e 'library(knitr);knit("README.Rmd")'
+	perl -p -i -e 's/```r/```s/;' README.md
 
 build: $(BASE)
 	cd ..;\
