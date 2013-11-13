@@ -6,12 +6,7 @@ alpha = '[A-Za-z]'
 alphas = paste0(alpha, '+')
 
 diget = '[0-9]'
-
 digets = paste0(diget, '+')
-
-space = ' '
-
-any = '.*'
 
 test_that('m fails if given other than character vector', {
 
@@ -41,7 +36,7 @@ test_that('m with capture returns numbered list', {
 
           expect_equal(m(string, capture(digets)), list(`1`=c('FALSE', '12', '12343')))
           expect_that(m(string, capture(alphas)), equals(list(`1`=c('this', 'chr', 'FALSE'))))
-          expect_that(m(string, paste0(capture(alphas), space, capture(alphas))), equals(list(`1`=c('this', 'FALSE', 'FALSE'), `2`=c('is', 'FALSE', 'FALSE'))))
+          expect_that(m(string, paste0(capture(alphas), ' ', capture(alphas))), equals(list(`1`=c('this', 'FALSE', 'FALSE'), `2`=c('is', 'FALSE', 'FALSE'))))
 
 })
 
