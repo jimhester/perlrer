@@ -34,14 +34,14 @@ pairs = c('<' = '>', '\\{' = '\\}', '\\[' = '\\]', '\\(' = '\\)')
 #' capturing, the output is a list of lists.
 #' @seealso \code{\link{regex}} Section 'Perl-like Regular Expressions' for a
 #' discussion of the supported options
-#' @export m
+#' @export
 m = function(data, pattern, options=""){
   #check arguments
   assert_that(is.character(data))
   assert_that(is.character(pattern))
   assert_that(is.character(options))
 
-  process_matches = function(data, res){
+  process_matches = function(res, data){
     starts = attr(res, 'capture.start')
     if(is.null(starts)){
       return(res != -1)
@@ -60,16 +60,11 @@ m = function(data, pattern, options=""){
   if(grepl('g', options)){
     options = gsub('g', '', options)
     pattern = reformat_pattern(pattern, options)
-    res = gregexpr(pattern=pattern, data, perl=T)
-    ret = list()
-    for(itr in seq_along(res)){
-      ret[[itr]] = process_matches(data[itr], res[[itr]])
-    }
-    ret
+    mapply(process_matches, gregexpr(pattern=pattern, data, perl=T), data)
   }
   else{
     pattern = reformat_pattern(pattern, options)
-    process_matches(data, regexpr(pattern=pattern, data, perl=T))
+    process_matches(regexpr(pattern=pattern, data, perl=T), data)
   }
 }
 
