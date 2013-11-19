@@ -163,15 +163,18 @@ s = function(data, pattern, replacement, options='') {
 #' @param names to give the output
 #' @return a (named) character vector with the split result
 #' @export
-#TODO options not used
-psplit = function(pattern, data, options, names=NULL){
-  res = gregexpr(pattern=pattern, data, perl=T)[[1]]
-  lengths = attr(res, 'match.length')
-  prev = c(1, res)
-  ret = substring(data, prev+c(0, lengths), c(res-lengths, nchar(data)))
-  if(!is.null(names))
-    names(ret) = names[seq_along(names)] #TODO short circuit like perl
-  ret
+psplit = function(pattern, data, options='', names=NULL){
+  split_matches = function(res, data){
+    lengths = attr(res, 'match.length')
+    if(base::any(lengths == -1))
+      return(data)
+    prev = c(1, res)
+    ret = substring(data, prev+c(0, lengths), c(res-lengths, nchar(data)))
+    if(!is.null(names))
+      names(ret) = names[seq_along(names)] #TODO short circuit like perl
+    ret
+  }
+  mapply(split_matches, gregexpr(pattern=reformat_pattern(pattern, options), data, perl=T), data)
 }
 
 #' join a character vector and/or a list by a delimiter, like perl's join
