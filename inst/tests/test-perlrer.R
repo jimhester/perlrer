@@ -59,10 +59,10 @@ test_that('m options other than g', {
 })
 
 test_that('m with g', {
-          expect_that(m(string, capture(alpha), options='g'),
-                      equals(list(list(`1`=c('t', 'h', 'i', 's', 'i', 's', 'T', 'e', 'x', 't')), 
-                                  list(`1`=c('c', 'h', 'r')), list(`1`='FALSE'))))
-          
+          expect_equal(m(string, capture(alpha), options='g'),
+                      list(`1`=c('t', 'h', 'i', 's', 'i', 's', 'T', 'e', 'x', 't'),
+                                  `1`=c('c', 'h', 'r'), `1`='FALSE'))
+          #TODO more m g tests
 })
 
 test_that('s fails if given other than character vector', {
@@ -122,4 +122,13 @@ test_that("infix functions work properly", {
   expect_that(string %m% '/this/', equals(m(string, 'this')))
   expect_that(string %m% '/this//', throws_error())
   expect_that(string %s% '/this/that/', equals(s(string, 'this', 'that')))
+})
+
+test_that("pjoin works properly", {
+          expect_equal(pjoin(' ', string), 'this is Text chr-12 12343 66544456')
+          expect_equal(pjoin(' ', string, list('testing', 'a', 'list')), 'this is Text chr-12 12343 66544456 testing a list')
+          expect_equal(pjoin(':', string, list('testing', 'a', 'list')), 'this is Text:chr-12:12343 66544456:testing:a:list')
+})
+test_that("psplit works properly", {
+          expect_equal(psplit(' ', string), list(c('this', 'is', 'Text'), 'chr-12', c('12343', '66544456')))
 })
