@@ -1,0 +1,29 @@
+\name{m}
+\alias{m}
+\title{Match function using perl compatible regular expressions}
+\usage{
+m(data, pattern, options = "")
+}
+\arguments{
+  \item{data}{character vector to match against}
+
+  \item{pattern}{regular expression to use for matching}
+
+  \item{options}{regular expression options to use}
+}
+\value{
+  if no captures, returns a logical vector the same length
+  as the input character vector specifying if the relevant
+  value matched or not.  If there are captures in the
+  regular expression, returns a list of named character
+  vectors with the captured text.  If the g option is used
+  with capturing, the output is a list of lists.
+}
+\description{
+  Match function using perl compatible regular expressions
+}
+\seealso{
+  \code{\link{regex}} Section 'Perl-like Regular
+  Expressions' for a discussion of the supported options
+}
+

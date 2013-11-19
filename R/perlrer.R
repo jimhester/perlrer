@@ -2,28 +2,30 @@
 #'
 #' This package aims to bring common perl regular expression functonality to R
 #' There are two major functions, m for regular expression matching and s for substitution
-#' @examples 
+#' @examples
 #' library(perlrer)
 #' string = 'This is a test'
-#' 
+#'
 #' #using the functional style
 #' m(string, 'this', 'i')
 #' #using the perl infix function style
 #' string %m% '/this/i'
-#' 
-#' #both work for substitutions as well
+#'
+#' #substitutions
 #' string = 'This is a test'
 #' s(string, 'this', 'that', 'i')
 #' string %s% '/this/that/i'
+#'
+#' #perl join and split for strings
+#' pjoin(' ', string)
+#' psplit(' ', string)
 #' @import assertthat
 #' @name perlrer
 #' @docType package
 NULL
 
-pairs = c('<' = '>', '\\{' = '\\}', '\\[' = '\\]', '\\(' = '\\)')
-
 #' Match function using perl compatible regular expressions
-#' 
+#'
 #' @param data character vector to match against
 #' @param pattern regular expression to use for matching
 #' @param options regular expression options to use
@@ -79,13 +81,13 @@ m = function(data, pattern, options=""){
 #' @examples
 #' string = c('this is a Test', 'string')
 #' string %m% '/test/i'
-#' #can also use paired delimiters
+#' #paired delimiters
 #' string %m% '{test}i'
 #' #captures return numbered results
 #' string %m% '!(string)!'
-#' #named captures supported as well
+#' #named captures
 #' string %m% '/(?<type>string)/'
-#' #g is supported as well
+#' # g option also
 #' string %m% '{(\w+)}g'
 #' @export
 "%m%" = function(data, pattern){
@@ -103,12 +105,9 @@ m = function(data, pattern, options=""){
 #' discussion of the supported options
 #' @examples
 #' string = c('this is a Test', 'string')
-#' 
 #' s(string, 'test', 'not a test', 'i')
-#' 
 #' s(string, 'i', 'x', 'g')
-#' 
-#' @export s
+#' @export
 #cannot get number of replacements without modifying C code in grep.c
 s = function(data, pattern, replacement, options='') {
   #check arguments
@@ -172,12 +171,14 @@ psplit = function(pattern, data, options='', names=NULL){
   mapply(split_matches, gregexpr(pattern=reformat_pattern(pattern, options), data, perl=T), data)
 }
 
-#' join a character vector and/or a list by a delimiter, like perl's join
-#' @param delim delimiter to join by
+#' join a character vector and/or a list by a delimiter, like perl's join it
+#' will append all objects and list elements
+#'
+#' @param delim delimiter to join by,  defaults to space
 #' @param ... objects to join
 #' @return a joined character
 #' @export
-pjoin = function(delim = '', ...) paste(unlist(list(...)), collapse=delim)
+pjoin = function(delim = ' ', ...) paste(unlist(list(...)), collapse=delim)
 
 escape_special = function(x){
   s(x, '([\\[\\](){}])', '\\\\$1', 'g')
@@ -236,6 +237,8 @@ reformat_pattern = function(pattern, options){
     pattern = paste0("(?", paste0(options, collapse=""), ")", pattern)
   pattern
 }
+
+pairs = c('<' = '>', '\\{' = '\\}', '\\[' = '\\]', '\\(' = '\\)')
 
 #helper functions used in testing
 capture = function(...) paste0('(', ..., ')', collapse='')

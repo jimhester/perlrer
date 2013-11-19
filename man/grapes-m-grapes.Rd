@@ -1,0 +1,33 @@
+\name{\%m\%}
+\alias{\%m\%}
+\title{Perl style infix match function}
+\usage{
+data \%m\% pattern
+}
+\arguments{
+  \item{pattern}{a character delimited regular expression
+  pattern like those in perl}
+
+  \item{data}{character vector to match against}
+}
+\description{
+  This function allows the match syntax to mimic perl's
+  very closely.  As in perl the first character is used as
+  a delimiter to separate the regular expression and
+  options.  Paired delimiters are supported as in perl, so
+  both '/this/' and '{this}' are both supported for
+  instance.
+}
+\examples{
+string = c('this is a Test', 'string')
+string \%m\% '/test/i'
+#paired delimiters
+string \%m\% '{test}i'
+#captures return numbered results
+string \%m\% '!(string)!'
+#named captures
+string \%m\% '/(?<type>string)/'
+# g option also
+string \%m\% '{(\\w+)}g'
+}
+

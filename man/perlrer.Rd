@@ -17,9 +17,13 @@ m(string, 'this', 'i')
 #using the perl infix function style
 string \%m\% '/this/i'
 
-#both work for substitutions as well
+#substitutions
 string = 'This is a test'
 s(string, 'this', 'that', 'i')
 string \%s\% '/this/that/i'
+
+#perl join and split for strings
+pjoin(' ', string)
+psplit(' ', string)
 }
 

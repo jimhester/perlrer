@@ -1,0 +1,24 @@
+\name{psplit}
+\alias{psplit}
+\title{split a character vector by using a regular expression, like perl's split}
+\usage{
+psplit(pattern, data, options = "", names = NULL)
+}
+\arguments{
+  \item{pattern}{the pattern to split by}
+
+  \item{data}{the data to split on}
+
+  \item{options}{options to include in the regular
+  expression}
+
+  \item{names}{to give the output}
+}
+\value{
+  a (named) character vector with the split result
+}
+\description{
+  split a character vector by using a regular expression,
+  like perl's split
+}
+
