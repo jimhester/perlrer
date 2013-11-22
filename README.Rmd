@@ -1,6 +1,7 @@
 # perlrer #
 Use perl regex syntax, get perl results in R!
 
+[![Build Status](https://travis-ci.org/jimhester/perlrer.png)](https://travis-ci.org/jimhester/perlrer)
 ```{r engine='perl'}
 $string = 'This is a test';
 print scalar $string =~ m/this/i;

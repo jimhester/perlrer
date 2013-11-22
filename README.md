@@ -1,6 +1,7 @@
 # perlrer #
 Use perl regex syntax, get perl results in R!
 
+[![Build Status](https://travis-ci.org/jimhester/perlrer.png)](https://travis-ci.org/jimhester/perlrer)
 
 ```perl
 $string = 'This is a test';
@@ -12,10 +13,10 @@ print scalar $string =~ m/this/i;
 ```
 
 
-```s
+```r
 library(perlrer)
-string = "This is a test"
-string %m% "/this/i"
+string = 'This is a test'
+string %m% '/this/i'
 ```
 
 ```
@@ -34,10 +35,10 @@ print $string;
 ```
 
 
-```s
+```r
 library(perlrer)
-string = "This is a test"
-string %s% "/this/that/i"
+string = 'This is a test'
+string %s% '/this/that/i'
 ```
 
 ```
@@ -60,13 +61,13 @@ print "@split_str\n";
 ```
 
 
-```s
+```r
 library(perlrer)
-alist = c("one", "two", "three")
-astring = "four"
-joined_str = pjoin(":", alist, astring)
+alist = c('one', 'two', 'three')
+astring = 'four'
+joined_str = pjoin(':', alist, astring)
 joined_str
-split_str = psplit(":", joined_str)
+split_str = psplit(':', joined_str)
 split_str
 ```
 
@@ -75,7 +76,8 @@ split_str
 ```
 
 ```
-## [1] "one"   "two"   "three" "four"
+##     one     two   three    four 
+##   "one"   "two" "three"  "four"
 ```
 
 
