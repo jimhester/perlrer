@@ -88,7 +88,7 @@ m = function(data, pattern, options=""){
 #' #named captures
 #' string %m% '/(?<type>string)/'
 #' # g option also
-#' string %m% '{(\w+)}g'
+#' string %m% '{(\\w+)}g'
 #' @export
 "%m%" = function(data, pattern){
   pattern = split_regex_m(pattern)
