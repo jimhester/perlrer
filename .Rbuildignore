@@ -1,1 +1,5 @@
 .travis.yml
+.R_package
+Makefile
+README.Rmd
+TODO.md

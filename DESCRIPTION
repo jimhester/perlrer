@@ -9,7 +9,9 @@ Depends:
     R (>= 3.0.0)
 Imports:
     assertthat
-License: MIT
+Suggests:
+    testthat
+License: MIT + file LICENSE
 URL: http://github.com/jimhester/perlrer
 BugReports: https://github.com/jimhester/perlrer/issues
 VignetteBuilder: knitr

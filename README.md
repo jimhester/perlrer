@@ -13,10 +13,10 @@ print scalar $string =~ m/this/i;
 ```
 
 
-```r
+```s
 library(perlrer)
-string = 'This is a test'
-string %m% '/this/i'
+string = "This is a test"
+string %m% "/this/i"
 ```
 
 ```
@@ -35,10 +35,10 @@ print $string;
 ```
 
 
-```r
+```s
 library(perlrer)
-string = 'This is a test'
-string %s% '/this/that/i'
+string = "This is a test"
+string %s% "/this/that/i"
 ```
 
 ```
@@ -61,13 +61,13 @@ print "@split_str\n";
 ```
 
 
-```r
+```s
 library(perlrer)
-alist = c('one', 'two', 'three')
-astring = 'four'
-joined_str = pjoin(':', alist, astring)
+alist = c("one", "two", "three")
+astring = "four"
+joined_str = pjoin(":", alist, astring)
 joined_str
-split_str = psplit(':', joined_str)
+split_str = psplit(":", joined_str)
 split_str
 ```
 

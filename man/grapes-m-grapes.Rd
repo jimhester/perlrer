@@ -28,6 +28,6 @@ string \%m\% '!(string)!'
 #named captures
 string \%m\% '/(?<type>string)/'
 # g option also
-string \%m\% '{(\\w+)}g'
+string \%m\% '{(\\\\w+)}g'
 }
 
