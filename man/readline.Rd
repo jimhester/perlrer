@@ -5,7 +5,7 @@
 readline(con)
 }
 \arguments{
-  \item{con}{}
+  \item{con}{the connection to read from}
 }
 \description{
   read a line from a file

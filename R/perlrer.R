@@ -203,7 +203,7 @@ popen = function(path, ...) file(path, 'rt', ...) #TODO handle pipes as well...
 
 #' read a line from a file
 #'
-#' @param con
+#' @param con the connection to read from
 #' @export
 readline = function(con) readLines(con, n=1)
 
