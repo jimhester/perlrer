@@ -91,6 +91,8 @@ m = function(data, pattern, options=""){
 #' string %m% '{(\\w+)}g'
 #' @export
 "%m%" = function(data, pattern){
+  assert_that(is.character(data))
+  assert_that(is.character(pattern))
   pattern = split_regex_m(pattern)
   m(data, pattern$pattern, pattern$options)
 }
@@ -145,6 +147,8 @@ s = function(data, pattern, replacement, options='') {
 #' string %s% '{is}{at}g'
 #' @export
 "%s%" = function(data, pattern){
+  assert_that(is.character(data))
+  assert_that(is.character(pattern))
   pattern = split_regex_s(pattern)
   s(data, pattern$pattern, pattern$replacement, pattern$options)
 }
@@ -158,6 +162,12 @@ s = function(data, pattern, replacement, options='') {
 #' @return a (named) character vector with the split result
 #' @export
 psplit = function(pattern, data, options='', names=NULL){
+  #check options
+  assert_that(is.character(pattern))
+  assert_that(is.character(data))
+  assert_that(is.character(options))
+  assert_that(is.null(names) || is.character(names))
+
   split_matches = function(res, data){
     lengths = attr(res, 'match.length')
     if(base::any(lengths == -1))
@@ -179,7 +189,10 @@ psplit = function(pattern, data, options='', names=NULL){
 #' @param ... objects to join
 #' @return a joined character
 #' @export
-pjoin = function(delim = ' ', ...) paste(unlist(list(...)), collapse=delim)
+pjoin = function(delim = ' ', ...) {
+  assert_that(is.character(delim))
+  paste(unlist(list(...)), collapse=delim)
+}
 
 escape_special = function(x){
   s(x, '([\\[\\](){}])', '\\\\$1', 'g')
