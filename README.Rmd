@@ -3,25 +3,30 @@ Use perl regex syntax, get perl results in R!
 
 [![Build Status](https://travis-ci.org/jimhester/perlrer.png)](https://travis-ci.org/jimhester/perlrer)
 ```{r engine='perl'}
+#perl
 $string = 'This is a test';
 print scalar $string =~ m/this/i;
 ```
-```{r}
+```{r, out.ext}
+#R
 library(perlrer)
 string = 'This is a test'
 string %m% '/this/i'
 ```
 ```{r engine='perl'}
+#perl
 $string = 'This is a test';
 $string =~ s/this/that/i;
 print $string;
 ```
 ```{r}
+#R
 library(perlrer)
 string = 'This is a test'
 string %s% '/this/that/i'
 ```
 ```{r engine='perl'}
+#perl
 @alist = ('one', 'two', 'three');
 $astring = 'four';
 $joined_str = join(':', @alist, $astring);
@@ -30,6 +35,7 @@ print $joined_str, "\n";
 print "@split_str\n";
 ```
 ```{r, results='hold'}
+#R
 library(perlrer)
 alist = c('one', 'two', 'three')
 astring = 'four'

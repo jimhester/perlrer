@@ -4,6 +4,7 @@ Use perl regex syntax, get perl results in R!
 [![Build Status](https://travis-ci.org/jimhester/perlrer.png)](https://travis-ci.org/jimhester/perlrer)
 
 ```perl
+#perl
 $string = 'This is a test';
 print scalar $string =~ m/this/i;
 ```
@@ -14,6 +15,7 @@ print scalar $string =~ m/this/i;
 
 
 ```s
+# R
 library(perlrer)
 string = "This is a test"
 string %m% "/this/i"
@@ -25,6 +27,7 @@ string %m% "/this/i"
 
 
 ```perl
+#perl
 $string = 'This is a test';
 $string =~ s/this/that/i;
 print $string;
@@ -36,6 +39,7 @@ print $string;
 
 
 ```s
+# R
 library(perlrer)
 string = "This is a test"
 string %s% "/this/that/i"
@@ -47,6 +51,7 @@ string %s% "/this/that/i"
 
 
 ```perl
+#perl
 @alist = ('one', 'two', 'three');
 $astring = 'four';
 $joined_str = join(':', @alist, $astring);
@@ -62,6 +67,7 @@ print "@split_str\n";
 
 
 ```s
+# R
 library(perlrer)
 alist = c("one", "two", "three")
 astring = "four"
@@ -76,8 +82,11 @@ split_str
 ```
 
 ```
-##     one     two   three    four 
-##   "one"   "two" "three"  "four"
+##      [,1]   
+## [1,] "one"  
+## [2,] "two"  
+## [3,] "three"
+## [4,] "four"
 ```
 
 
