@@ -5,3 +5,4 @@
 - [x] tests
 - [x] documentation
 - [ ] any way to get the number of substitutions?  I don't think there is :(
+- [ ] files, should be able to do similar to default perl

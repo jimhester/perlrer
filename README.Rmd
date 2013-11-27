@@ -2,6 +2,9 @@
 Use perl regex syntax, get perl results in R!
 
 [![Build Status](https://travis-ci.org/jimhester/perlrer.png)](https://travis-ci.org/jimhester/perlrer)
+
+#Examples
+## Matching
 ```{r engine='perl'}
 #perl
 $string = 'This is a test';
@@ -13,6 +16,7 @@ library(perlrer)
 string = 'This is a test'
 string %m% '/this/i'
 ```
+## Substitution
 ```{r engine='perl'}
 #perl
 $string = 'This is a test';
@@ -25,6 +29,7 @@ library(perlrer)
 string = 'This is a test'
 string %s% '/this/that/i'
 ```
+## String Splits/Joins
 ```{r engine='perl'}
 #perl
 @alist = ('one', 'two', 'three');
@@ -43,5 +48,26 @@ joined_str = pjoin(':', alist, astring)
 joined_str
 split_str = psplit(':', joined_str)
 split_str
+```
+## File reading by line
+```{r engine='perl'}
+#perl
+open IN, "<", "README.Rmd";
+$count = 0;
+while($line = <IN> and $count < 2){
+  print $line;
+  $count++;
+}
+close IN;
+```
+```{r, results='hold'}
+#R
+IN = popen("README.Rmd")
+count = 0
+while(line %<>% IN && count < 2){
+  print(line)
+  count=count+1;
+}
+pclose(IN);
 ```
 

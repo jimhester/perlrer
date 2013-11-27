@@ -194,6 +194,53 @@ pjoin = function(delim = ' ', ...) {
   paste(unlist(list(...)), collapse=delim)
 }
 
+#' open a read only file connection
+#'
+#' @param path the path to the file
+#' @param ... additional parameters passed to file
+#' @export
+popen = function(path, ...) file(path, 'rt', ...) #TODO handle pipes as well...
+
+#' read a line from a file
+#'
+#' @param con
+#' @export
+readline = function(con) readLines(con, n=1)
+
+#' read a line from a file, like perl's <>, works well in while loops
+#'
+#' @param data, the object each line will be assigned to
+#' @param con, the connection to be read from
+#' @return TRUE while something was read from the connection, then FALSE after
+#' @export
+#' @examples
+#' cat("TITLE extra line", "2 3 5 7", "", "11 13 17", file = "ex.data",
+#'     sep = "\n")
+#' fh_ex = popen('ex.data')
+#' while(line %<>% fh_ex){
+#'   print(line)
+#' }
+#' pclose(fh_ex) #tidy up
+#' unlink("ex.data")
+'%<>%' = function(data, con) {
+  res=readline(con)
+  if(length(res) > 0) {
+    assign(as.character(substitute(data)), res, envir=parent.frame())
+    invisible(TRUE)
+  }
+  else
+    invisible(FALSE)
+}
+
+#' close a connection and remove its object from the environment
+#'
+#' @param con the connection to close
+#' @export
+pclose = function(con) {
+  eval(substitute(close(con)), envir=parent.frame())
+  rm(list=as.character(substitute(con)), envir=parent.frame())
+}
+
 escape_special = function(x){
   s(x, '([\\[\\](){}])', '\\\\$1', 'g')
 }

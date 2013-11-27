@@ -1,0 +1,30 @@
+\name{\%<>\%}
+\alias{\%<>\%}
+\title{read a line from a file, like perl's <>, works well in while loops}
+\usage{
+data \%<>\% con
+}
+\arguments{
+  \item{data,}{the object each line will be assigned to}
+
+  \item{con,}{the connection to be read from}
+}
+\value{
+  TRUE while something was read from the connection, then
+  FALSE after
+}
+\description{
+  read a line from a file, like perl's <>, works well in
+  while loops
+}
+\examples{
+cat("TITLE extra line", "2 3 5 7", "", "11 13 17", file = "ex.data",
+    sep = "\\n")
+fh_ex = popen('ex.data')
+while(line \%<>\% fh_ex){
+  print(line)
+}
+pclose(fh_ex) #tidy up
+unlink("ex.data")
+}
+

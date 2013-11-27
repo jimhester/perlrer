@@ -3,6 +3,9 @@ Use perl regex syntax, get perl results in R!
 
 [![Build Status](https://travis-ci.org/jimhester/perlrer.png)](https://travis-ci.org/jimhester/perlrer)
 
+#Examples
+## Matching
+
 ```perl
 #perl
 $string = 'This is a test';
@@ -17,6 +20,18 @@ print scalar $string =~ m/this/i;
 ```s
 # R
 library(perlrer)
+```
+
+```
+## 
+## Attaching package: 'perlrer'
+## 
+## The following object is masked from 'package:base':
+## 
+##     readline
+```
+
+```s
 string = "This is a test"
 string %m% "/this/i"
 ```
@@ -25,6 +40,7 @@ string %m% "/this/i"
 ## [1] TRUE
 ```
 
+## Substitution
 
 ```perl
 #perl
@@ -49,6 +65,7 @@ string %s% "/this/that/i"
 ## [1] "that is a test"
 ```
 
+## String Splits/Joins
 
 ```perl
 #perl
@@ -82,11 +99,42 @@ split_str
 ```
 
 ```
-##      [,1]   
-## [1,] "one"  
-## [2,] "two"  
-## [3,] "three"
-## [4,] "four"
+## [1] "one"   "two"   "three" "four"
+```
+
+## File reading by line
+
+```perl
+#perl
+open IN, "<", "README.Rmd";
+$count = 0;
+while($line = <IN> and $count < 2){
+  print $line;
+  $count++;
+}
+close IN;
+```
+
+```
+## # perlrer #
+## Use perl regex syntax, get perl results in R!
+```
+
+
+```s
+# R
+IN = popen("README.Rmd")
+count = 0
+while (line %<>% IN && count < 2) {
+    print(line)
+    count = count + 1
+}
+pclose(IN)
+```
+
+```
+## [1] "# perlrer #"
+## [1] "Use perl regex syntax, get perl results in R!"
 ```
 
 
