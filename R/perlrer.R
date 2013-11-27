@@ -168,7 +168,8 @@ psplit = function(pattern, data, options='', names=NULL){
       names(ret) = names[seq_along(names)] #TODO short circuit like perl
     ret
   }
-  mapply(split_matches, gregexpr(pattern=reformat_pattern(pattern, options), data, perl=T), data)
+  if(length(data) < 2) split_matches(gregexpr(pattern=reformat_pattern(pattern, options), data, perl=T)[[1]], data)
+  else mapply(split_matches, gregexpr(pattern=reformat_pattern(pattern, options), data, perl=T), data)
 }
 
 #' join a character vector and/or a list by a delimiter, like perl's join it
