@@ -1,4 +1,4 @@
 library(testthat)
 library(perlrer)
 
-test_package('perlrer')
+test_check('perlrer')
