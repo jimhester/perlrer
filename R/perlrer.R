@@ -55,7 +55,7 @@ m = function(data, pattern, options=""){
       ret[[itr]] = unname(ifelse(starts[,itr] == -1, "FALSE",
                           substring(data, starts[,itr], starts[,itr] + lengths[,itr] - 1)))
     }
-    names(ret) = ifelse(names == "", 1:nrow(starts), names)
+    names(ret) = ifelse(names == "", 1:ncol(starts), names)
     ret
   }
 
@@ -199,7 +199,11 @@ pjoin = function(delim = ' ', ...) {
 #' @param path the path to the file
 #' @param ... additional parameters passed to file
 #' @export
-popen = function(path, ...) file(path, 'rt', ...) #TODO handle pipes as well...
+popen = function(file, ...){
+  file = if(is.character(file)) file(file, 'rt', ...) else file
+  if(!isOpen(file)) open(file)
+  file
+}
 
 #' read a line from a file
 #'

@@ -37,6 +37,7 @@ test_that('m with capture returns numbered list', {
           expect_equal(m(string, capture(digets)), list(`1`=c('FALSE', '12', '12343')))
           expect_equal(m(string, capture(alphas)), list(`1`=c('this', 'chr', 'FALSE')))
           expect_equal(m(string, paste0(capture(alphas), ' ', capture(alphas))), list(`1`=c('this', 'FALSE', 'FALSE'), `2`=c('is', 'FALSE', 'FALSE')))
+          expect_equal(m(string[1], paste0(capture(alphas), ' ', capture(alphas))), list(`1`=c('this'), `2`=c('is')))
 
 })
 
