@@ -218,10 +218,10 @@ readline = function(con) readLines(con, n=1)
 #' @return TRUE while something was read from the connection, then FALSE after
 #' @export
 #' @examples
-#' cat("TITLE extra line", "2 3 5 7", "", "11 13 17", file = "ex.data",
-#'     sep = "\n")
+#' cat("TITLE extra line", "2 3 5 7", "", "11 13 17", file = "ex.data", sep = "\n")
 #' fh_ex = popen('ex.data')
-#' while(line %<>% fh_ex){
+#' while(1 %/% 1)
+#' {
 #'   print(line)
 #' }
 #' pclose(fh_ex) #tidy up

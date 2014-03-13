@@ -18,7 +18,7 @@ print scalar $string =~ m/this/i;
 
 
 ```s
-# R
+#R
 library(perlrer)
 ```
 
@@ -32,8 +32,8 @@ library(perlrer)
 ```
 
 ```s
-string = "This is a test"
-string %m% "/this/i"
+string = 'This is a test'
+string %m% '/this/i'
 ```
 
 ```
@@ -55,10 +55,10 @@ print $string;
 
 
 ```s
-# R
+#R
 library(perlrer)
-string = "This is a test"
-string %s% "/this/that/i"
+string = 'This is a test'
+string %s% '/this/that/i'
 ```
 
 ```
@@ -84,13 +84,13 @@ print "@split_str\n";
 
 
 ```s
-# R
+#R
 library(perlrer)
-alist = c("one", "two", "three")
-astring = "four"
-joined_str = pjoin(":", alist, astring)
+alist = c('one', 'two', 'three')
+astring = 'four'
+joined_str = pjoin(':', alist, astring)
 joined_str
-split_str = psplit(":", joined_str)
+split_str = psplit(':', joined_str)
 split_str
 ```
 
@@ -122,14 +122,14 @@ close IN;
 
 
 ```s
-# R
+#R
 IN = popen("README.Rmd")
 count = 0
-while (line %<>% IN && count < 2) {
-    print(line)
-    count = count + 1
+while(line %<>% IN && count < 2){
+  print(line)
+  count=count+1;
 }
-pclose(IN)
+pclose(IN);
 ```
 
 ```
